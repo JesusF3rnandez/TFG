@@ -25,8 +25,8 @@ class CardCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Carta')
-            ->setEntityLabelInPlural('Cartas')
+            ->setEntityLabelInSingular('Card')
+            ->setEntityLabelInPlural('Cards')
             ->setSearchFields(['name', 'description', 'price'])
             ->setDefaultSort(['id' => 'DESC']);
     }

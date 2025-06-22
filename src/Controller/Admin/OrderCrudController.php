@@ -23,8 +23,8 @@ class OrderCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Pedido')
-            ->setEntityLabelInPlural('Pedidos')
+            ->setEntityLabelInSingular('Order')
+            ->setEntityLabelInPlural('Orders')
             ->setSearchFields(['id', 'owner.email', 'status'])
             ->setDefaultSort(['orderDate' => 'DESC'])
             ->setPaginatorPageSize(10)
