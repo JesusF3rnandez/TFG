@@ -3,7 +3,6 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Order;
-use App\Entity\OrderItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -12,6 +11,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 
 class OrderCrudController extends AbstractCrudController
 {
@@ -23,12 +24,23 @@ class OrderCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Order')
-            ->setEntityLabelInPlural('Orders')
+            ->setEntityLabelInSingular('Pedido')
+            ->setEntityLabelInPlural('Pedidos')
+            ->setPageTitle('index', 'Listado de Pedidos')
+            ->setPageTitle('detail', 'Detalle del Pedido')
+            ->setPageTitle('edit', 'Editar Pedido')
             ->setSearchFields(['id', 'owner.email', 'status'])
             ->setDefaultSort(['orderDate' => 'DESC'])
             ->setPaginatorPageSize(10)
             ->showEntityActionsInlined();
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->remove(Crud::PAGE_INDEX, Action::NEW)
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->add(Crud::PAGE_EDIT, Action::DETAIL);
     }
 
     public function configureFields(string $pageName): iterable
