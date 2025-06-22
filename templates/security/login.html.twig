@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Iniciar sesión{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1>Iniciar sesión</h1>
+
+            {# Muestra un mensaje si el usuario ya está logueado #}
+            {% if app.user %}
+                <div class="mb-3 alert alert-info">
+                    Ya has iniciado sesión como {{ app.user.userIdentifier }}. Puedes <a href="{{ path('app_logout') }}">cerrar sesión</a> si lo deseas.
+                </div>
+            {% endif %}
+
+            {# Muestra errores de login si los hay #}
+            {% if error %}
+                <div class="alert alert-danger">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
+
+            <form method="post" action="{{ path('app_login') }}">
+                <div class="mb-3">
+                    <label for="inputEmail" class="form-label">Correo electrónico</label>
+                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" required autofocus>
+                </div>
+                <div class="mb-3">
+                    <label for="inputPassword" class="form-label">Contraseña</label>
+                    <input type="password" name="password" id="inputPassword" class="form-control" required>
+                </div>
+
+                {# ¡AÑADIDA ESTA LÍNEA PARA EL TOKEN CSRF! #}
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <div class="mb-3 form-check">
+                    <input type="checkbox" name="_remember_me" id="remember_me" class="form-check-input">
+                    <label for="remember_me" class="form-check-label">Recuérdame</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Entrar</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

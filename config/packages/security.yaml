@@ -1,0 +1,43 @@
+security:
+    password_hashers:
+        App\Entity\User: auto  # Asegúrate de tener esta entidad
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email  # o username, depende de tu entidad
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            lazy: true
+            provider: app_user_provider
+            entry_point: App\Security\AppAuthenticator
+
+            custom_authenticators:
+                - App\Security\AppAuthenticator
+
+            logout:
+                path: app_logout
+                target: app_home
+
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
+            custom_authenticator: App\Security\QAuthenticator
+                #always_remember_me: true
+
+    access_control:
+        # Rutas públicas
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/logout, roles: PUBLIC_ACCESS }
+        # Rutas privadas
+        - { path: ^/order, roles: ROLE_USER }
+        # El resto se puede ver sin login
+        - { path: ^/, roles: PUBLIC_ACCESS }

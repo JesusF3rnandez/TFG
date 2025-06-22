@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalles de la Carta - {{ card.name }}{% endblock %}
+
+{% block body %}
+    <div class="container my-4">
+        <h1 class="mb-4">{{ card.name }}</h1>
+
+        <div class="row">
+            <div class="col-md-5">
+                {% if card.image %}
+                    <img src="{{ asset('uploads/cards/' ~ card.image) }}" alt="{{ card.name }}" class="img-fluid rounded shadow-sm card-image-detail">
+                {% else %}
+                    <div class="d-flex align-items-center justify-content-center bg-light text-muted border rounded" style="height: 350px; width: 100%; object-fit: cover;">
+                        <span>Imagen no disponible</span>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-7">
+                <h4>Descripción</h4>
+                <p>{{ (card.description ?: 'No hay descripción disponible.')|raw }}</p>
+
+                <h5 class="mt-4">Precio:</h5>
+                <p class="fs-4 fw-bold">{{ card.price ? card.price|format_currency('EUR') : 'No disponible' }}</p>
+
+                <h5 class="mt-4">Stock:</h5>
+                <p class="fs-5">{{ card.stock }} unidad(es) disponibles</p>
+
+                {% if app.user %}
+                    {% if card.stock > 0 %}
+                        <form action="{{ path('cart_add', {'id': card.id}) }}" method="post" class="mt-4">
+                            <div class="input-group mb-3" style="max-width: 200px;">
+                                <input type="number" name="quantity" class="form-control" value="1" min="1" max="{{ card.stock }}" aria-label="Cantidad" aria-describedby="button-addon">
+                                <button class="btn btn-success" type="submit" id="button-addon">
+                                    <i class="fas fa-cart-plus me-2"></i>Añadir al Carrito
+                                </button>
+                            </div>
+                        </form>
+                    {% else %}
+                        <div class="alert alert-warning mt-4" role="alert">
+                            ¡Lo sentimos! Esta carta está actualmente **agotada**.
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="alert alert-info mt-4" role="alert">
+                        <a href="{{ path('app_login') }}" class="alert-link">Inicia sesión</a> para añadir esta carta al carrito.
+                    </div>
+                {% endif %}
+
+                <a href="{{ path('card_index') }}" class="btn btn-secondary mt-3">
+                    <i class="fas fa-arrow-left me-2"></i>Volver al listado
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

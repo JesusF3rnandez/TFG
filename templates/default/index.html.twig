@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inicio - Tienda de Cartas{% endblock %}
+
+{% block body %}
+    <h1>Cartas Destacadas</h1>
+
+    {% if cards is empty %}
+        <p>No hay cartas para mostrar.</p>
+    {% else %}
+        <ul style="list-style: none; padding: 0;">
+            {% for card in cards %}
+                <li style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+                    <h2>{{ card.name }}</h2>
+
+                    {% if card.image %}
+                        <img src="{{ asset('uploads/cards/' ~ card.image) }}" alt="{{ card.name }}" style="max-width: 150px; height: auto;">
+                    {% else %}
+                        <p>[Imagen no disponible]</p>
+                    {% endif %}
+
+                    <p>{{ card.description|length > 150 ? card.description|slice(0, 150) ~ '...' : card.description }}</p>
+                    <p><strong>Precio:</strong> {{ card.price ? card.price ~ ' €' : 'No disponible' }}</p>
+                    <p><strong>Stock:</strong> {{ card.stock }}</p>
+
+                    <a href="{{ path('card_show', {'id': card.id}) }}">Ver detalles</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

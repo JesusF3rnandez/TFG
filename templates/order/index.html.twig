@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mis Pedidos{% endblock %}
+
+{% block body %}
+    <h1>Mis Pedidos</h1>
+    <ul>
+        {% for order in orders %}
+            <li>
+                Pedido #{{ order.id }} - {{ order.status }} - {{ order.orderDate|date('d/m/Y') }}
+                (<a href="{{ path('order_show', {'id': order.id}) }}">ver detalle</a>)
+            </li>
+        {% else %}
+            <li>No has realizado pedidos aún.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

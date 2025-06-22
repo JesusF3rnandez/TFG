@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalle del Pedido{% endblock %}
+
+{% block body %}
+    <h1>Pedido #{{ order.id }}</h1>
+    <p><strong>Estado:</strong> {{ order.status }}</p>
+    <p><strong>Fecha:</strong> {{ order.orderDate|date('d/m/Y') }}</p>
+    <p><strong>Total:</strong> {{ order.total }} €</p>
+
+    <h2>Artículos</h2>
+    <ul>
+        {% for item in order.orderItems %}
+            <li>
+                {{ item.card.name }} - {{ item.quantity }} x {{ item.unitPrice }} € =
+                {{ item.quantity * item.unitPrice }} €
+            </li>
+        {% else %}
+            <li>Este pedido no tiene artículos.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ path('order_index') }}">Volver a mis pedidos</a>
+{% endblock %}

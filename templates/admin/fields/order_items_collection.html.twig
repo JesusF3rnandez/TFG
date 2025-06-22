@@ -1,0 +1,34 @@
+{% if field.value is not empty %}
+    <table class="table table-bordered table-sm my-3">
+        <thead class="table-light">
+        <tr>
+            <th>Artículo</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Subtotal</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for orderItem in field.value %}
+            <tr>
+                <td>
+                    {% if orderItem.card %}
+                        <a href="{{ ea_url()
+                            .setController('App\\Controller\\Admin\\CardCrudController')
+                            .setAction('detail')
+                            .setEntityId(orderItem.card.id)
+                        }}">{{ orderItem.card.name }}</a>
+                    {% else %}
+                        Carta no disponible (ID: {{ orderItem.card.id }})
+                    {% endif %}
+                </td>
+                <td>{{ orderItem.quantity }}</td>
+                <td>{{ orderItem.unitPrice|format_currency('EUR') }}</td>
+                <td>{{ (orderItem.unitPrice * orderItem.quantity)|format_currency('EUR') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <span class="badge bg-secondary">Sin artículos en el pedido</span>
+{% endif %}
